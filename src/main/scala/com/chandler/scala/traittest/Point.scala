@@ -1,4 +1,4 @@
-package com.chandler.scala.`trait`
+package com.chandler.scala.traittest
 
 class Point(xc: Int, yc: Int) extends Equal {
   var x: Int = xc

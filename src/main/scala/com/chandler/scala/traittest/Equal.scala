@@ -1,4 +1,4 @@
-package com.chandler.scala.`trait`
+package com.chandler.scala.traittest
 
 trait Equal {
   def isEqual(x:Any): Boolean

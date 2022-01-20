@@ -1,4 +1,4 @@
-package com.chandler.scala.`trait`
+package com.chandler.scala.traittest
 
 object Test {
   def main(args: Array[String]): Unit = {
