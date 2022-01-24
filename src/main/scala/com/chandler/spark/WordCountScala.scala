@@ -12,21 +12,29 @@ object WordCountScala {
 
     val sc = new SparkContext(conf)
 
-    //单词统计
+    //单词统计d，统计单词出现为2次的单词个数
     //Dataset
-    val fileRDD: RDD[String] = sc.textFile("data/words.txt")
-    //hello world
-    //    val result = fileRDD.flatMap((x) => x.split(" "))
-    //      .map((_, 1))
-    //      .groupBy(_._1)
-    //      .mapValues(_.size)
+    //返回的是HadoopRDD
+    val fileRDD: RDD[String] = sc.textFile("data/words.txt", 1)
 
-    val result = fileRDD
+    val res = fileRDD
       .flatMap(_.split(" "))
       .map((_, 1))
       .reduceByKey(_ + _) //(x, y) x是oldValue y是value
-    result.foreach(println)
 
+    /**
+     *  (hello, 2)  ==> (2, 1)
+     *  (msb, 1) ==> (1, 1)
+     *  (world, 2) ==> (2, 1)
+     */
+    val res2 = res.map((x) => {
+      (x._2, 1)
+    }).reduceByKey(_ + _)
 
+    res.foreach(println)
+    res2.foreach(println)
+
+    //访问localhost:4040 查看Job task
+    Thread.sleep(Long.MaxValue)
   }
 }
