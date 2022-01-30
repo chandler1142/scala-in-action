@@ -9,12 +9,12 @@ object lesson01_fromfile {
     val conf = new SparkConf()
       .setAppName("SparkStreamingWordCount")
       .setMaster("local[2]")
-    val ssc = new StreamingContext(conf, Seconds(5))
+    val ssc = new StreamingContext(conf, Seconds(2))
     ssc.sparkContext.setLogLevel("ERROR")
 
     println(123)
     //lines ===> DStream
-    val lines: DStream[String] = ssc.textFileStream("file:///D:/tmp")
+    val lines: DStream[String] = ssc.textFileStream("file:///D:/tmp/")
     val words = lines.flatMap(_.split(","))
     val pairs = words.map(e => (e, 1))
     val wordCounts = pairs.reduceByKey(_+_)
