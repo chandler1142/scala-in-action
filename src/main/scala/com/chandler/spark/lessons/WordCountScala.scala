@@ -1,4 +1,4 @@
-package com.chandler.spark
+package com.chandler.spark.lessons
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
@@ -23,9 +23,9 @@ object WordCountScala {
       .reduceByKey(_ + _) //(x, y) x是oldValue y是value
 
     /**
-     *  (hello, 2)  ==> (2, 1)
-     *  (msb, 1) ==> (1, 1)
-     *  (world, 2) ==> (2, 1)
+     * (hello, 2)  ==> (2, 1)
+     * (msb, 1) ==> (1, 1)
+     * (world, 2) ==> (2, 1)
      */
     val res2 = res.map((x) => {
       (x._2, 1)

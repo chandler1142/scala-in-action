@@ -1,4 +1,4 @@
-package com.chandler.spark
+package com.chandler.spark.lessons
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
@@ -85,7 +85,6 @@ object lesson01_rdd_api01 {
 
     val leftJoinRDD = kv1.leftOuterJoin(kv2)
     leftJoinRDD.foreach(println)
-
 
 
     Thread.sleep(Long.MaxValue)

@@ -1,4 +1,4 @@
-package com.chandler.spark
+package com.chandler.spark.lessons
 
 import org.apache.spark.rdd.RDD
 import org.apache.spark.{SparkConf, SparkContext}
@@ -24,7 +24,7 @@ object lesson02_rdd_api_sort {
     //208.189.214.201	江苏	2018-11-12	1542011090255	8685178694078178794	www.suning.com	Comment
     println("-------------- PV: ----------------")
     val pair = file.map(line => (line.split("\t")(5), 1))
-    val reduce = pair.reduceByKey(_+_)
+    val reduce = pair.reduceByKey(_ + _)
     val map = reduce.map((_.swap))
     val sorted: RDD[(Int, String)] = map.sortByKey(false)
     val res: RDD[(String, Int)] = sorted.map(_.swap)
@@ -38,7 +38,7 @@ object lesson02_rdd_api_sort {
       (strs(5), strs(0))
     })
     val key: RDD[(String, String)] = keys.distinct()
-    val pairx: RDD[(String, Int)] = key.map(k=>(k._1, 1))
+    val pairx: RDD[(String, Int)] = key.map(k => (k._1, 1))
     val uvreduce: RDD[(String, Int)] = pairx.reduceByKey(_ + _)
     val uvSorted: RDD[(String, Int)] = uvreduce.sortBy(_._2, false)
     val uv: Array[(String, Int)] = uvSorted.take(5)
