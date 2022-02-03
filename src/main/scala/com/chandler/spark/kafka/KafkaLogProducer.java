@@ -21,10 +21,11 @@ public class KafkaLogProducer {
 
         KafkaProducer<String, String> producer = new KafkaProducer<>(props);
 
-        for (int i = 0; i < 100; i++) {
-            Future<RecordMetadata> record = producer.send(new ProducerRecord<String, String>("access-log-prod", i + "", LogGenerator.generate()));
+        for (int i = 0; i < 10; i++) {
+            String log = LogGenerator.generate((long)i);
+            Future<RecordMetadata> record = producer.send(new ProducerRecord<String, String>("access-log-prod", i + "", log));
             RecordMetadata recordMetadata = record.get();
-            System.out.println(recordMetadata.toString());
+            System.out.println(log);
         }
         System.out.println("消息发送完毕...");
 
