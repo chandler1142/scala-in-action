@@ -16,7 +16,7 @@ object KafkaStreamingCount {
       .setMaster("local[2]")
     sparkConf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
 
-    val ssc = new StreamingContext(sparkConf, Seconds(10))
+    val ssc = new StreamingContext(sparkConf, Seconds(3))
 
     val groupId = "default-group"
     val kafkaParams = Map[String, Object](
@@ -27,7 +27,7 @@ object KafkaStreamingCount {
       "auto.offset.reset" -> "latest",
       "enable.auto.commit" -> (true: java.lang.Boolean)
     )
-    ssc.checkpoint("ckpt1")
+    ssc.checkpoint("ckpt")
 
     val topics = Array("access-log-prod")
     val stream = KafkaUtils.createDirectStream[String, String](
@@ -38,20 +38,29 @@ object KafkaStreamingCount {
 
 
     //需求1: 统计PV，即单日页面访问数
-    val dataRDD: DStream[((String, String), Int)] = stream.map(x => {
-      val splits: Array[String] = x.value().split("\t")
-      //日期，页面代号, 计数1
-      ((DateUtils.parseToDay(splits(0)), splits(3)), 1)
-    })
-
-    val reducedRDD: DStream[((String, String), Int)] = dataRDD.reduceByKey(_ + _)
-    val accumulatedDataRDD: DStream[((String, String), Int)] = reducedRDD.updateStateByKey(updateFunction _)
-
-    accumulatedDataRDD.print()
-
-
+    //    val dataRDD: DStream[((String, String), Int)] = stream.map(x => {
+    //      val splits: Array[String] = x.value().split("\t")
+    //      //日期，页面代号, 计数1
+    //      ((DateUtils.parseToDay(splits(0)), splits(3)), 1)
+    //    })
+    //
+    //    val reducedRDD: DStream[((String, String), Int)] = dataRDD.reduceByKey(_ + _)
+    //    val accumulatedDataRDD: DStream[((String, String), Int)] = reducedRDD.updateStateByKey(updateFunction _)
+    //
+    //    accumulatedDataRDD.print()
+    //
 
     //需求2: 统计UV，即单日用户访问数
+    val dataRDD = stream.map(x => {
+      val splits: Array[String] = x.value().split("\t")
+      //日期, 用户名称, 计数1
+      ((DateUtils.parseToDay(splits(0)), splits(5)), 1)
+    })
+
+    val reduceRDD: DStream[((String, String), Int)] = dataRDD.reduceByKey(_ + _)
+    val accumulatedDataRDD: DStream[((String, String), Int)] = reduceRDD.updateStateByKey(updateFunction _)
+
+    accumulatedDataRDD.print()
 
     ssc.start()
     ssc.awaitTermination()
