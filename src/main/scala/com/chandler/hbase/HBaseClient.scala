@@ -2,7 +2,7 @@ package com.chandler.hbase
 
 import java.util
 
-import org.apache.hadoop.hbase.client.{ConnectionFactory, Put, Result, ResultScanner, Scan}
+import org.apache.hadoop.hbase.client.{ConnectionFactory, Put, Result, Scan}
 import org.apache.hadoop.hbase.util.Bytes
 import org.apache.hadoop.hbase.{Cell, CellUtil, HBaseConfiguration, TableName}
 
@@ -14,9 +14,9 @@ object HBaseClient {
   private val connection = ConnectionFactory.createConnection(configuration)
 
   def main(args: Array[String]): Unit = {
-//        println(getTable("user"))
-//    insert("user")
-    query("user")
+    //        println(getTable("user"))
+    //    insert("user")
+    query("access_user_hour")
   }
 
   def getTable(tableName: String) = {
@@ -41,24 +41,23 @@ object HBaseClient {
   def query(tableName: String) = {
     val table = getTable(tableName)
     val scan = new Scan()
-    scan.withStartRow("1".getBytes)
-    scan.withStopRow("4".getBytes)
-    scan.addColumn("o".getBytes, "name".getBytes)
+    //    scan.withStartRow("1".getBytes)
+    //    scan.withStopRow("4".getBytes)
+    //    scan.addColumn("o".getBytes, "name".getBytes)
     val iterator: util.Iterator[Result] = table.getScanner(scan).iterator()
 
-    while(iterator.hasNext) {
+    while (iterator.hasNext) {
       val result: Result = iterator.next()
-      while(result.advance()) {
+      while (result.advance()) {
         val cell: Cell = result.current()
         val row = new String(CellUtil.cloneRow(cell))
         val family = new String(CellUtil.cloneFamily(cell))
         val qualifier = new String(CellUtil.cloneQualifier(cell))
-        val value= new String(CellUtil.cloneValue(cell))
-
+        //        val value= new String(CellUtil.cloneValue(cell))
+        val value = Bytes.toLong(CellUtil.cloneValue(cell))
         println(s"$row | $family | $qualifier | $value")
       }
     }
-
 
     if (null != table) {
       table.close()
