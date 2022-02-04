@@ -14,7 +14,7 @@ object KafkaStreamingApp {
     val sparkConf: SparkConf = new SparkConf()
       .setAppName(this.getClass.getSimpleName)
       .setMaster("local[2]")
-//    sparkConf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
+    //    sparkConf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
 
     val ssc = new StreamingContext(sparkConf, Seconds(3))
 
@@ -48,12 +48,37 @@ object KafkaStreamingApp {
      * 每个用户每个小时使用时长
      * 用户，每个小时，时长
      */
+    //    logStream.map(x => {
+    //      ((x._1, x._3), x._2)
+    //    }).reduceByKey(_ + _)
+    //      .foreachRDD(rdd => {
+    //        rdd.foreachPartition(partition => {
+    //          val table: Table = HBaseClient.getTable("access_user_hour")
+    //          partition.foreach(x => {
+    //            val rowKey = s"${x._1._1}_${x._1._2}"
+    //            table.incrementColumnValue(
+    //              rowKey.getBytes,
+    //              "o".getBytes,
+    //              "time".getBytes,
+    //              x._2
+    //            )
+    //          })
+    //
+    //          if (table != null) {
+    //            table.close()
+    //          }
+    //        })
+    //      })
+
+    /**
+     * 统计每个用户每天的使用时长
+     */
     logStream.map(x => {
-      ((x._1, x._3), x._2)
+      ((x._1.substring(0, 8), x._3), x._2)
     }).reduceByKey(_ + _)
       .foreachRDD(rdd => {
         rdd.foreachPartition(partition => {
-          val table: Table = HBaseClient.getTable("access_user_hour")
+          val table: Table = HBaseClient.getTable("access_user_day")
           partition.foreach(x => {
             val rowKey = s"${x._1._1}_${x._1._2}"
             table.incrementColumnValue(

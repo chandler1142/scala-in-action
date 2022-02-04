@@ -16,7 +16,8 @@ object HBaseClient {
   def main(args: Array[String]): Unit = {
     //        println(getTable("user"))
     //    insert("user")
-    query("access_user_hour")
+//    query("access_user_hour")
+    query("access_user_day")
   }
 
   def getTable(tableName: String) = {
