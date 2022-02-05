@@ -25,9 +25,10 @@ public class KafkaLogConsumer {
 
         consumer.subscribe(Arrays.asList("access-log-prod"));
 
+//        consumer.subscribe(Arrays.asList("ssstopic"));
         while(true) {
             System.out.println("Try to get data...");
-            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(1000));
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(3000));
             for(ConsumerRecord record : records) {
                 System.out.println(record.key() + "\t"
                 + record.value() + "\t"

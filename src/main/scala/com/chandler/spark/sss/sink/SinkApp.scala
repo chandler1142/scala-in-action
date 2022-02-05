@@ -7,11 +7,27 @@ object SinkApp {
     val spark: SparkSession = SparkSession.builder().master("local[2]")
       .appName(this.getClass.getSimpleName)
       .getOrCreate()
-    sink(spark)
+    spark.sparkContext.setLogLevel("ERROR")
+    //    fileSink(spark)
+    kafkaSink(spark)
   }
 
+  def kafkaSink(spark: SparkSession) = {
+    import spark.implicits._
+    spark.readStream.format("socket")
+      .option("host", "8.130.29.166")
+      .option("port", "3389")
+      .load().as[String]
+      .writeStream
+      .format("kafka")
+      .option("kafka.bootstrap.servers", "localhost:9092")
+      .option("topic", "access-log-prod")
+      .option("checkpointLocation", "ckpt")
+//      .format("console")
+      .start().awaitTermination()
+  }
 
-  def sink(spark: SparkSession) = {
+  def fileSink(spark: SparkSession) = {
     import spark.implicits._
 
     spark.readStream.format("socket")
