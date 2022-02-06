@@ -4,6 +4,12 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.expr
 import org.apache.spark.sql.types.StructType
 
+/**
+ *
+ * Spark Structured Streaming的基本操作
+ * 转换操作和从Json读数据并分组
+ *
+ */
 object SSBasicApp {
   val path = "D:\\study\\spark\\Spark-The-Definitive-Guide\\data\\test\\"
 
