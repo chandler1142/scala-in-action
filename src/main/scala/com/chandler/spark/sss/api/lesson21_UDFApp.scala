@@ -3,7 +3,7 @@ package com.chandler.spark.sss.api
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.{col, udf}
 
-object UDFApp {
+object lesson21_UDFApp {
   def main(args: Array[String]): Unit = {
     val spark: SparkSession = SparkSession.builder()
       .master("local[2]")

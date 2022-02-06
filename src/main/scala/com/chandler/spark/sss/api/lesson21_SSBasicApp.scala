@@ -10,7 +10,7 @@ import org.apache.spark.sql.types.StructType
  * 转换操作和从Json读数据并分组
  *
  */
-object SSBasicApp {
+object lesson21_SSBasicApp {
   val path = "D:\\study\\spark\\Spark-The-Definitive-Guide\\data\\test\\"
 
   def main(args: Array[String]): Unit = {
