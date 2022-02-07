@@ -2,7 +2,6 @@ package com.chandler.spark.sss.api
 
 import java.sql.Timestamp
 
-import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.streaming.{GroupState, GroupStateTimeout}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
