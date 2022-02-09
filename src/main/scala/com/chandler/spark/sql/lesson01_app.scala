@@ -26,5 +26,6 @@ object lesson01_app {
         |""".stripMargin).show(false)
 
     spark.stop()
+
   }
 }
