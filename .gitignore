@@ -6,3 +6,6 @@
 target
 ckpt
 output
+*.log
+metastore_db/
+bigdata-spark/
