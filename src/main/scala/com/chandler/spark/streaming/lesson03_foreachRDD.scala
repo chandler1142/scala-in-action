@@ -3,6 +3,7 @@ package com.chandler.spark.streaming
 import java.sql.Connection
 
 import org.apache.spark.SparkConf
+import org.apache.spark.rdd.RDD
 import org.apache.spark.streaming.dstream.{DStream, ReceiverInputDStream}
 import org.apache.spark.streaming.{Seconds, StreamingContext}
 
@@ -21,6 +22,7 @@ object lesson03_foreachRDD {
     val lines: ReceiverInputDStream[String] = ssc.socketTextStream("8.130.29.166", 3389)
     val result: DStream[(String, Int)] = lines.flatMap(_.split(",")).map((_, 1)).reduceByKey(_ + _)
 
+    RDD
     //把结果通过foreachRDD通过算子输出到MySQL
     result.foreachRDD(rdd => {
       rdd.foreachPartition(partition => {
