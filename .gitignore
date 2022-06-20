@@ -9,3 +9,5 @@ output
 *.log
 metastore_db/
 bigdata-spark/
+
+data/*.csv
